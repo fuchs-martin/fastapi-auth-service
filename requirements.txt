@@ -6,4 +6,5 @@ bcrypt==4.0.1
 SQLAlchemy
 pydantic
 pydantic-settings
+pydantic[email]
 python-dotenv
