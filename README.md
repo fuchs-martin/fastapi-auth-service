@@ -27,16 +27,16 @@ Uvicorn - ASGI server
 Python 3.13+
 
 ## Project structure
-app/
-├── auth/
-│ ├── jwt_handler.py
-│ ├── utils.py
-│ └── router.py
-├── config.py
-├── database.py
-├── models.py
-├── schemas.py
-└── main.py
+app/  
+├── auth/  
+│ ├── jwt_handler.py  
+│ ├── utils.py  
+│ └── router.py  
+├── config.py  
+├── database.py  
+├── models.py  
+├── schemas.py  
+└── main.py  
 
 ## Setup and Installation
 1. Clone the repository  
