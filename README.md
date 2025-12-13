@@ -29,9 +29,9 @@ Python 3.13+
 ## Project structure
 app/  
 ├── auth/  
-│ ├── jwt_handler.py  
-│ ├── utils.py  
-│ └── router.py  
+│   ├── jwt_handler.py  
+│   ├── utils.py  
+│   └── router.py  
 ├── config.py  
 ├── database.py  
 ├── models.py  
