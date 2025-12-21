@@ -3,8 +3,14 @@ from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
 from app.config import settings
 
+DATABASE_URL = settings.DATABASE_URL.replace(
+    "postgres://",
+    "postgresql+psycopg://",
+    1,
+)
+
 engine = create_engine(
-    settings.DATABASE_URL,
+    DATABASE_URL,
     pool_pre_ping=True,
 )
 
@@ -15,7 +21,8 @@ SessionLocal = sessionmaker(
     bind=engine,
     autocommit=False,
     autoflush=False,
-    expire_on_commit=False)
+    expire_on_commit=False,
+)
 
 def get_db():
     db = SessionLocal()
