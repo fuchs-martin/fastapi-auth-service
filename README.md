@@ -3,42 +3,78 @@
 ![Python](https://img.shields.io/badge/Python-3.13%2B-blue)
 ![Framework](https://img.shields.io/badge/FastAPI-backend-009688)
 ![Auth](https://img.shields.io/badge/Auth-JWT%20%7C%20HTTP%20Bearer-orange)
-![Database](https://img.shields.io/badge/Database-SQLite%20%28Postgres--ready%29-lightgrey)
-![Status](https://img.shields.io/badge/Status-Active-success)
+![Database](https://img.shields.io/badge/Database-PostgreSQL-blue)
+![Deployment](https://img.shields.io/badge/Deploy-Fly.io-purple)
+![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-black)
+![Status](https://img.shields.io/badge/Status-Production--Ready-success)
 ![Scope](https://img.shields.io/badge/Scope-LLM%20Infrastructure-black)
 
-A lightweight, production-ready authentication microservice built with FastAPI, designed as a foundational component for scalable LLM applications and modern backend systems.
+---
+
+## Overview
+
+**FastAPI Auth Service** is a lightweight, production-ready authentication microservice built with FastAPI and PostgreSQL.
+
 
 ## Features
-- User registration with hashed passwords (bcrypt)
-- JWT-based login and authorization
-- Protected '/auth/me' endpoint using HTTP Bearer
-- SQLite database using SQLAlchemy ORM (easily swappable to PostgreSQL)
-- Environment-based configuration using Pydantic Settings
-- Auto-generated interactive API docs (Swagger)
-- Designed for integration into RAG systems, multi-agent backends, and LLM orchestration pipelines
+- User registration with **bcrypt-hashed passwords**  
+- JWT-based authentication (HTTP Bearer)  
+- Protected user context endpoint (`/auth/me`)  
+- PostgreSQL database with **SQLAlchemy 2.0**  
+- Schema versioning via **Alembic migrations**  
+- Environment-based configuration (Pydantic Settings)  
+- Dockerized for production deployment  
+- Deployed on **Fly.io**  
+- CI/CD pipeline using **GitHub Actions**  
+- Designed for future extension (refresh tokens, rate limiting, LLM auth flows)  
+
+
+## Architecture Overview
+Client  
+│  
+│ HTTP (JWT Bearer)  
+▼  
+FastAPI Auth Service  
+│  
+│ SQLAlchemy ORM  
+▼  
+PostgreSQL (Fly.io)  
+- Stateless API  
+- Database schema managed exclusively via Alembic  
+- Secrets managed via environment variables  
+- Deployment automated through CI/CD  
+
 
 ## Tech Stack
-FastAPI - Python web framework  
-SQLAlchemy 2.0 - ORM  
-JWT (python-jose) - token generation and validation  
-Pydantic v2 and pydantic-settings - configuration management  
-Uvicorn - ASGI server  
-Python 3.13+
+- **FastAPI** – ASGI web framework  
+- **Python 3.13**  
+- **SQLAlchemy 2.0** – ORM  
+- **PostgreSQL** – production database  
+- **Alembic** – schema migrations  
+- **JWT (python-jose)** – authentication tokens  
+- **Pydantic v2** – settings & validation  
+- **Docker** – containerization  
+- **Fly.io** – cloud deployment  
+- **GitHub Actions** – CI/CD  
 
 ## Project structure
 app/  
 ├── auth/  
-│   ├── jwt_handler.py  
-│   ├── utils.py  
-│   └── router.py  
-├── config.py  
-├── database.py  
-├── models.py  
-├── schemas.py  
-└── main.py  
+│ ├── router.py # Auth endpoints  
+│ ├── jwt_handler.py # JWT creation & validation  
+│ └── utils.py # Password hashing utilities  
+├── config.py # Environment-based settings  
+├── database.py # SQLAlchemy engine & session  
+├── models.py # ORM models  
+├── schemas.py # Pydantic schemas  
+└── main.py # Application entrypoint  
+alembic/  
+├── versions/ # Migration history  
+├── env.py # Alembic runtime config  
+└── script.py.mako  
+fly.toml # Fly.io deployment config  
 
-## Setup and Installation
+## Local Development
 1. Clone the repository  
 ```
 git clone https://github.com/fuchs-martin/fastapi-auth-service.git  
@@ -62,17 +98,35 @@ cp .env.example .env
 ```  
 Update the values:  
 ```
+ENV=local  
 SECRET_KEY=changeme  
 ALGORITHM=HS256  
-ACCESS_TOKEN_EXPIRE_MINUTES=60
+ACCESS_TOKEN_EXPIRE_MINUTES=60  
+DATABASE_URL=postgresql+psycopg://user:password@localhost:5432/dbname
 ```  
-5. Run the application  
+5. Run database migrations  
+```
+alembic upgrade head
+```  
+6. Start application  
 ```
 uvicorn app.main:app --reload
 ```  
 API available at:  
 - Docs: http://127.0.0.1:8000/docs  
 -  Docs: http://127.0.0.1:8000/health
+
+## Deployment
+The service is deployed on Fly.io and automatically updated via GitHub Actions on push to the main branch.  
+
+Live URL:  
+```
+https://fastapi-auth-starter.fly.dev
+```  
+Health check:  
+```
+GET /health
+```  
 
 ## API Endpoints
 **Health**  
